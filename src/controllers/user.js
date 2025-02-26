@@ -4,6 +4,11 @@ import { sendDataResponse, sendMessageResponse } from '../utils/responses.js'
 export const create = async (req, res) => {
   const userToCreate = await User.fromJson(req.body)
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(userToCreate.email)) {
+    return sendDataResponse(res, 400, { email: 'Invalid email format' })
+  }
+
   try {
     const existingUser = await User.findByEmail(userToCreate.email)
 
