@@ -15,6 +15,12 @@ CREATE TABLE "Profile" (
     "lastName" TEXT NOT NULL,
     "bio" TEXT,
     "githubUrl" TEXT,
+    "username" TEXT,
+    "mobile" TEXT,
+    "specialism" TEXT,
+    "startDate" TEXT,
+    "endDate" TEXT,
+    "jobTitle" TEXT,
 
     CONSTRAINT "Profile_pkey" PRIMARY KEY ("id")
 );

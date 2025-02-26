@@ -7,7 +7,7 @@ export default class User {
    * take as inputs, what types they return, and other useful information that JS doesn't have built in
    * @tutorial https://www.valentinog.com/blog/jsdoc
    *
-   * @param { { id: int, cohortId: int, email: string, profile: { firstName: string, lastName: string, bio: string, githubUrl: string } } } user
+   * @param { { id: int, cohortId: int, email: string, profile: { firstName: string, lastName: string, bio: string, githubUrl: string, username: string, mobile: string, startDate: string, endDate: string, specialism: string, jobTitle: string } } } user
    * @returns {User}
    */
   static fromDb(user) {
@@ -19,6 +19,12 @@ export default class User {
       user.email,
       user.profile?.bio,
       user.profile?.githubUrl,
+      user.profile?.username,
+      user.profile?.mobile,
+      user.profile?.startDate,
+      user.profile?.endDate,
+      user.profile?.specialism,
+      user.profile?.jobTitle,
       user.password,
       user.role
     )
@@ -26,7 +32,20 @@ export default class User {
 
   static async fromJson(json) {
     // eslint-disable-next-line camelcase
-    const { firstName, lastName, email, biography, githubUrl, password } = json
+    const {
+      firstName,
+      lastName,
+      email,
+      biography,
+      githubUrl,
+      username,
+      mobile,
+      startDate,
+      endDate,
+      specialism,
+      jobTitle,
+      password
+    } = json
 
     const passwordHash = await bcrypt.hash(password, 8)
 
@@ -38,6 +57,12 @@ export default class User {
       email,
       biography,
       githubUrl,
+      username,
+      mobile,
+      startDate,
+      endDate,
+      specialism,
+      jobTitle,
       passwordHash
     )
   }
@@ -50,6 +75,12 @@ export default class User {
     email,
     bio,
     githubUrl,
+    username,
+    mobile,
+    startDate = 'January 2025',
+    endDate = 'June 2025',
+    specialism = 'Software Developer',
+    jobTitle,
     passwordHash = null,
     role = 'STUDENT'
   ) {
@@ -60,6 +91,12 @@ export default class User {
     this.email = email
     this.bio = bio
     this.githubUrl = githubUrl
+    this.username = username
+    this.mobile = mobile
+    this.startDate = startDate
+    this.endDate = endDate
+    this.specialism = specialism
+    this.jobTitle = jobTitle
     this.passwordHash = passwordHash
     this.role = role
   }
@@ -74,7 +111,13 @@ export default class User {
         lastName: this.lastName,
         email: this.email,
         biography: this.bio,
-        githubUrl: this.githubUrl
+        githubUrl: this.githubUrl,
+        username: this.username,
+        mobile: this.mobile,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        specialism: this.specialism,
+        jobTitle: this.jobTitle
       }
     }
   }
@@ -116,6 +159,32 @@ export default class User {
     })
 
     return User.fromDb(createdUser)
+  }
+
+  async createProfile(id) {
+    console.log(typeof id)
+    const data = {
+      firstName: this.firstName,
+      lastName: this.lastName,
+      githubUrl: this.githubUrl,
+      bio: this.bio,
+      username: this.username,
+      mobile: this.mobile,
+      startDate: this.startDate,
+      endDate: this.endDate,
+      specialism: this.specialism,
+      jobTitle: this.jobTitle,
+      user: {
+        connect: {
+          id: id
+        }
+      }
+    }
+    const updatedUser = await dbClient.profile.create({
+      data
+    })
+
+    return User.fromDb(updatedUser)
   }
 
   static async findByEmail(email) {

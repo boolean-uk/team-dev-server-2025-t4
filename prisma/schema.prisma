@@ -36,6 +36,12 @@ model Profile {
   lastName    String
   bio         String?
   githubUrl   String?
+  username    String?
+  mobile      String?
+  startDate   String?
+  endDate     String?
+  specialism  String?
+  jobTitle    String?
 }
 
 model Cohort {
