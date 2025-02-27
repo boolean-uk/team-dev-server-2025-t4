@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Team Dev Server API
   description: |-
-  version: 1.0
+  version: '1.0'
 
 servers:
   - url: http://localhost:4000/
@@ -183,13 +183,13 @@ paths:
                 content:
                   type: string
       responses:
-        201:
+        '201':
           description: success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Post'
-        400:
+        '400':
           description: fail
           content:
             application/json:
@@ -244,7 +244,7 @@ paths:
                       content:
                         type: string
       responses:
-        201:
+        '201':
           description: success
           content:
             application/json:
@@ -266,7 +266,7 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        201:
+        '201':
           description: success
           content:
             application/json:
@@ -279,7 +279,70 @@ paths:
                     properties:
                       cohort:
                         $ref: '#/components/schemas/Cohort'
-        400:
+        '400':
+          description: fail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      tags:
+        - cohort
+      summary: Get all cohorts
+      description: This can only be done by a logged in user.
+      operationId: getAllCohorts
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllUsers'
+        '500':
+          description: fail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /cohorts/{id}:
+    get:
+      tags:
+        - cohort
+      summary: Get cohort by id
+      description: This can only be done by a logged in user.
+      operationId: getCohortById
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: 'Id of the cohort to fetch'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    properties:
+                      cohort:
+                        $ref: '#/components/schemas/Cohort'
+        '404':
+          description: fail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
           description: fail
           content:
             application/json:
@@ -306,6 +369,19 @@ components:
                   type: integer
                 content:
                   type: string
+
+    AllCohorts:
+      type: object
+      properties:
+        status:
+          type: string
+        data:
+          type: object
+          properties:
+            cohorts:
+              type: array
+              items:
+                $ref: '#/components/schemas/Cohort'
 
     Cohort:
       type: object
