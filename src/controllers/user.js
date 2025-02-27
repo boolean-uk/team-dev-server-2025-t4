@@ -55,6 +55,30 @@ export const getById = async (req, res) => {
   }
 }
 
+export const getStudentsByName = async (req, res) => {
+  try {
+    const { name } = req.params
+    if (!name) {
+      return sendMessageResponse(res, 400, 'Search query is required')
+    }
+
+    const usersByFirstName = await User.findManyThatContainsFirstName(name)
+    const usersByLastName = await User.findManyThatContainsLastName(name)
+
+    const uniqueUsers = [...usersByFirstName, ...usersByLastName]
+      .reduce((acc, user) => {
+        acc.set(user.id, user) // Using a Map to remove duplicates
+        return acc
+      }, new Map())
+      .values()
+
+    return sendDataResponse(res, 200, [...uniqueUsers]) // Convert back to array
+  } catch (error) {
+    console.error('Error fetching users:', error)
+    return sendMessageResponse(res, 500, 'Unable to get users')
+  }
+}
+
 export const getAll = async (req, res) => {
   // eslint-disable-next-line camelcase
   const { first_name: firstName } = req.query
