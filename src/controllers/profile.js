@@ -1,4 +1,4 @@
-import { sendDataResponse, sendMessageResponse } from '../utils/responses.js'
+import { sendDataResponse } from '../utils/responses.js'
 import User from '../domain/user.js'
 
 export const createProfile = async (req, res) => {
@@ -13,8 +13,4 @@ export const createProfile = async (req, res) => {
   const createdProfile = await profile.createProfile(paramId)
 
   return sendDataResponse(res, 201, createdProfile)
-}
-
-export const updateProfile = async (req, res) => {
-  
 }
