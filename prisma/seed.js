@@ -20,7 +20,7 @@ async function seed() {
   const teacher = await createUser(
     'teacher@test.com',
     'Testpassword1!',
-    null,
+    cohort.id,
     'Rick',
     'Sanchez',
     'Hello there!',

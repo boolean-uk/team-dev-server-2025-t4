@@ -99,3 +99,7 @@ export const createProfile = async (req, res) => {
 
   return sendDataResponse(res, 201, createdProfile)
 }
+
+export const updateProfile = async (req, res) => {
+  
+}
