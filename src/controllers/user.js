@@ -86,7 +86,6 @@ export const updateById = async (req, res) => {
   return sendDataResponse(res, 201, { user: { cohort_id: cohortId } })
 }
 
-
 export const createProfile = async (req, res) => {
   const paramId = parseInt(req.params.id)
   const user = await User.findById(paramId)
