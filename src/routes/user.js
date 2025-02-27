@@ -18,5 +18,6 @@ router.get('/', validateAuthentication, getAll)
 router.get('/search', validateAuthentication, getByName)
 router.get('/:id', validateAuthentication, getById)
 router.patch('/:id', validateAuthentication, validateTeacherRole, updateById)
+router.post('/profile/:id', validateAuthentication, createProfile)
 
 export default router
