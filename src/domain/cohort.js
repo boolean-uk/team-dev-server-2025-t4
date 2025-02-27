@@ -13,10 +13,22 @@ export async function createCohort() {
 }
 
 export class Cohort {
-  constructor(id = null, deliveryLogs = null, users = null) {
+  constructor(
+    id = null,
+    deliveryLogs = null,
+    users = null,
+    startDate,
+    endDate,
+    specialism = null,
+    jobTitle
+  ) {
     this.id = id
     this.deliveryLogs = deliveryLogs
     this.users = users
+    this.startDate = startDate
+    this.endDate = endDate
+    this.specialism = specialism
+    this.jobTitle = jobTitle
   }
 
   toJSON() {
@@ -24,13 +36,25 @@ export class Cohort {
       cohort: {
         id: this.id,
         deliveryLogs: this.deliveryLogs,
-        users: this.users
+        users: this.users,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        specialism: this.specialism,
+        jobTitle: this.jobTitle
       }
     }
   }
 
   static fromDb(cohort) {
-    return new Cohort(cohort.id, cohort.deliveryLogs, cohort.users)
+    return new Cohort(
+      cohort.id,
+      cohort.deliveryLogs,
+      cohort.users,
+      cohort.startDate,
+      cohort.endDate,
+      cohort.specialism,
+      cohort.jobTitle
+    )
   }
 
   static async findAll() {

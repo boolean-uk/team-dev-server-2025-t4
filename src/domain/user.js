@@ -7,7 +7,7 @@ export default class User {
    * take as inputs, what types they return, and other useful information that JS doesn't have built in
    * @tutorial https://www.valentinog.com/blog/jsdoc
    *
-   * @param { { id: int, cohortId: int, email: string, profile: { firstName: string, lastName: string, bio: string, githubUrl: string, username: string, mobile: string, startDate: string, endDate: string, specialism: string, jobTitle: string } } } user
+   * @param { { id: int, cohortId: int, email: string, profile: { firstName: string, lastName: string, bio: string, githubUrl: string, username: string, mobile: string } } } user
    * @returns {User}
    */
   static fromDb(user) {
@@ -21,10 +21,6 @@ export default class User {
       user.profile?.githubUrl,
       user.profile?.username,
       user.profile?.mobile,
-      user.profile?.startDate,
-      user.profile?.endDate,
-      user.profile?.specialism,
-      user.profile?.jobTitle,
       user.password,
       user.role
     )
@@ -40,10 +36,6 @@ export default class User {
       githubUrl,
       username,
       mobile,
-      startDate,
-      endDate,
-      specialism,
-      jobTitle,
       password
     } = json
 
@@ -59,10 +51,6 @@ export default class User {
       githubUrl,
       username,
       mobile,
-      startDate,
-      endDate,
-      specialism,
-      jobTitle,
       passwordHash
     )
   }
@@ -77,10 +65,6 @@ export default class User {
     githubUrl,
     username,
     mobile,
-    startDate = 'January 2025',
-    endDate = 'June 2025',
-    specialism = 'Software Developer',
-    jobTitle,
     passwordHash = null,
     role = 'STUDENT'
   ) {
@@ -93,10 +77,6 @@ export default class User {
     this.githubUrl = githubUrl
     this.username = username
     this.mobile = mobile
-    this.startDate = startDate
-    this.endDate = endDate
-    this.specialism = specialism
-    this.jobTitle = jobTitle
     this.passwordHash = passwordHash
     this.role = role
   }
@@ -113,11 +93,7 @@ export default class User {
         biography: this.bio,
         githubUrl: this.githubUrl,
         username: this.username,
-        mobile: this.mobile,
-        startDate: this.startDate,
-        endDate: this.endDate,
-        specialism: this.specialism,
-        jobTitle: this.jobTitle
+        mobile: this.mobile
       }
     }
   }
@@ -170,10 +146,6 @@ export default class User {
       bio: this.bio,
       username: this.username,
       mobile: this.mobile,
-      startDate: this.startDate,
-      endDate: this.endDate,
-      specialism: this.specialism,
-      jobTitle: this.jobTitle,
       user: {
         connect: {
           id: id
