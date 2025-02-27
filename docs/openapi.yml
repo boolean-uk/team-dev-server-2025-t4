@@ -119,6 +119,46 @@ paths:
 
         '400':
           description: Invalid username/password supplied
+          
+  /users/search:
+    get:
+      tags:
+        - user
+      summary: Search users by first name and/or last name
+      description: 'Search for users by their first name, last name, or both. Either parameter is optional.'
+      operationId: searchUsers
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: firstName
+          in: query
+          description: 'Search users by their first name (optional).'
+          schema:
+            type: string
+        - name: lastName
+          in: query
+          description: 'Search users by their last name (optional).'
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Users found successfully'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllUsers'
+        '400':
+          description: 'Bad request, invalid query parameters.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'No users found matching the query.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /users/{id}:
     get:
