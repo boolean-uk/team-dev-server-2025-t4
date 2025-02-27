@@ -65,6 +65,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
+  /users/profile/{id}:
+    post:
+      tags:
+        - profile
+      summary: Create profile
+      description: Create new profile
+      operationId: createProfile
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: User registration details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProfile'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedProfile'
+
   /login:
     post:
       tags:
@@ -368,6 +399,30 @@ components:
         password:
           type: string
 
+    CreateProfile:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        bio:
+          type: string
+        githubUrl:
+          type: string
+        username:
+          type: string
+        mobile:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        specialism:
+          type: string
+        jobTitle:
+          type: string
+
     UpdateUser:
       type: object
       properties:
@@ -457,6 +512,40 @@ components:
                   type: string
                 githubUrl:
                   type: string
+
+    CreatedProfile:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        data:
+          properties:
+            user:
+              properties:
+                id:
+                  type: integer
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                bio:
+                  type: string
+                githubUrl:
+                  type: string
+                username:
+                  type: string
+                mobile:
+                  type: string
+                startDate:
+                  type: string
+                endDate:
+                  type: string
+                specialism:
+                  type: string
+                jobTitle:
+                  type: string
+
     login:
       type: object
       properties:
