@@ -55,15 +55,22 @@ export const getById = async (req, res) => {
   }
 }
 
-export const getStudentsByName = async (req, res) => {
+export const getByName = async (req, res) => {
   try {
-    const { name } = req.params
-    if (!name) {
+    const { firstName, lastName } = req.query
+    if (!firstName && !lastName) {
       return sendMessageResponse(res, 400, 'Search query is required')
     }
 
-    const usersByFirstName = await User.findManyThatContainsFirstName(name)
-    const usersByLastName = await User.findManyThatContainsLastName(name)
+    let usersByFirstName = []
+    let usersByLastName = []
+
+    if (firstName) {
+      usersByFirstName = await User.findManyThatContainsFirstName(firstName)
+    }
+    if (lastName) {
+      usersByLastName = await User.findManyThatContainsLastName(lastName)
+    }
 
     const uniqueUsers = [...usersByFirstName, ...usersByLastName]
       .reduce((acc, user) => {

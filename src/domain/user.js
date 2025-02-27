@@ -200,11 +200,11 @@ export default class User {
   }
 
   static async findManyThatContainsFirstName(firstName) {
-    return User._findManyStudentsContains('firstName', firstName)
+    return User._findManyContains('firstName', firstName)
   }
 
   static async findManyThatContainsLastName(lastName) {
-    return User._findManyStudentsContains('lastName', lastName)
+    return User._findManyContains('lastName', lastName)
   }
 
   static async findAll() {
@@ -248,10 +248,9 @@ export default class User {
     return foundUsers.map((user) => User.fromDb(user))
   }
 
-  static async _findManyStudentsContains(key, value) {
+  static async _findManyContains(key, value) {
     const foundUsers = await dbClient.user.findMany({
       where: {
-        role: 'STUDENT',
         profile: {
           [key]: {
             contains: value,
