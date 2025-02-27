@@ -1,5 +1,11 @@
 import { Router } from 'express'
-import { create, getById, getAll, updateById, createProfile } from '../controllers/user.js'
+import {
+  create,
+  getById,
+  getAll,
+  updateById,
+  createProfile
+} from '../controllers/user.js'
 import {
   validateAuthentication,
   validateTeacherRole

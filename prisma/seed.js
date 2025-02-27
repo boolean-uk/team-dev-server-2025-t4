@@ -3,7 +3,8 @@ import bcrypt from 'bcrypt'
 const prisma = new PrismaClient()
 
 async function seed() {
-  const cohort = await createCohort()
+  const specialism = await createSpecialism('Software Developer')
+  const cohort = await createCohort(specialism.id, 'January 2025', 'June 2025')
 
   const student = await createUser(
     'student@test.com',
@@ -14,11 +15,7 @@ async function seed() {
     'Hello, world!',
     'student1',
     'username',
-    'mobile',
-    'startDate',
-    'endDate',
-    'specialism',
-    'jobTitle'
+    'mobile'
   )
   const teacher = await createUser(
     'teacher@test.com',
@@ -30,10 +27,6 @@ async function seed() {
     'teacher1',
     'username',
     'mobile',
-    'startDate',
-    'endDate',
-    'specialism',
-    'jobTitle',
     'TEACHER'
   )
 
@@ -59,14 +52,31 @@ async function createPost(userId, content) {
   return post
 }
 
-async function createCohort() {
+async function createCohort(specialismId, startDate, endDate, jobTitle) {
   const cohort = await prisma.cohort.create({
-    data: {}
+    data: {
+      specialismId,
+      startDate,
+      endDate,
+      jobTitle
+    }
   })
 
   console.info('Cohort created', cohort)
 
   return cohort
+}
+
+async function createSpecialism(specialismName) {
+  const specialism = await prisma.specialism.create({
+    data: {
+      specialismName
+    }
+  })
+
+  console.info('Specialism created', specialism)
+
+  return specialism
 }
 
 async function createUser(
@@ -79,10 +89,6 @@ async function createUser(
   githubUrl,
   username,
   mobile,
-  startDate,
-  endDate,
-  specialism,
-  jobTitle,
   role = 'STUDENT'
 ) {
   const user = await prisma.user.create({
@@ -98,11 +104,7 @@ async function createUser(
           bio,
           githubUrl,
           username,
-          mobile,
-          startDate,
-          endDate,
-          specialism,
-          jobTitle
+          mobile
         }
       }
     },
