@@ -1,11 +1,5 @@
 import { Router } from 'express'
-import {
-  create,
-  getById,
-  getAll,
-  updateById,
-  createProfile
-} from '../controllers/user.js'
+import { create, getById, getAll, updateById } from '../controllers/user.js'
 import {
   validateAuthentication,
   validateTeacherRole
@@ -17,6 +11,5 @@ router.post('/', create)
 router.get('/', validateAuthentication, getAll)
 router.get('/:id', validateAuthentication, getById)
 router.patch('/:id', validateAuthentication, validateTeacherRole, updateById)
-router.post('/profile/:id', validateAuthentication, createProfile)
 
 export default router

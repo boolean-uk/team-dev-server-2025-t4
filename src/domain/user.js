@@ -14,10 +14,8 @@ export default class User {
     return new User(
       user.id,
       user.cohortId,
-      user.profile,
-      user.posts,
-      user.deliveryLogs,
       user.email,
+      user.profile,
       user.password,
       user.role
     )
@@ -25,19 +23,11 @@ export default class User {
 
   static async fromJson(json) {
     // eslint-disable-next-line camelcase
-    const { email, cohortId, profile, posts, deliveryLogs, password } = json
+    const { email, cohortId, profile, password } = json
 
     const passwordHash = await bcrypt.hash(password, 8)
 
-    return new User(
-      null,
-      cohortId,
-      email,
-      profile,
-      posts,
-      deliveryLogs,
-      passwordHash
-    )
+    return new User(null, cohortId, email, profile, passwordHash)
   }
 
   constructor(
@@ -45,17 +35,13 @@ export default class User {
     cohortId,
     email,
     profile = null,
-    posts = null,
-    deliveryLogs = null,
     passwordHash = null,
     role = 'STUDENT'
   ) {
     this.id = id
     this.cohortId = cohortId
-    this.profile = profile
-    this.posts = posts
-    this.deliveryLogs = deliveryLogs
     this.email = email
+    this.profile = profile
     this.passwordHash = passwordHash
     this.role = role
   }
@@ -67,9 +53,7 @@ export default class User {
         cohort_id: this.cohortId,
         role: this.role,
         email: this.email,
-        profile: this.profile,
-        posts: this.posts,
-        deliveryLogs: this.deliveryLogs
+        profile: this.profile
       }
     }
   }
@@ -84,16 +68,11 @@ export default class User {
       password: this.passwordHash,
       role: this.role,
       cohortId: this.cohortId,
-      profile: this.profile,
-      posts: this.posts,
-      deliveryLogs: this.deliveryLogs
+      profile: this.profile ? { connect: { id: this.profile.id } } : undefined
     }
 
     const createdUser = await dbClient.user.create({
-      data,
-      include: {
-        profile: true
-      }
+      data
     })
 
     return User.fromDb(createdUser)
@@ -115,9 +94,6 @@ export default class User {
     const foundUser = await dbClient.user.findUnique({
       where: {
         [key]: value
-      },
-      include: {
-        profile: true
       }
     })
 
