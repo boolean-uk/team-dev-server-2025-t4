@@ -66,7 +66,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /users/profile/{id}:
+  /profile/{id}:
     post:
       tags:
         - profile
@@ -84,6 +84,34 @@ paths:
             type: string
       requestBody:
         description: User registration details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProfile'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedProfile'
+    patch:
+      tags:
+        - profile
+      summary: Update profile
+      description: Update a profile
+      operationId: updateProfile
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: 'ID of the profile to update'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Updated profile values
         content:
           application/json:
             schema:
