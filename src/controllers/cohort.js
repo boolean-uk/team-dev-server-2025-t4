@@ -1,13 +1,17 @@
-import { Cohort, createCohort } from '../domain/cohort.js'
+import { Cohort } from '../domain/cohort.js'
 import { sendDataResponse, sendMessageResponse } from '../utils/responses.js'
 
 export const create = async (req, res) => {
+  const cohortToCreate = await Cohort.fromJson(req.body)
+  console.log(cohortToCreate)
   try {
-    const createdCohort = await createCohort()
+    const createdCohort = await cohortToCreate.save()
+
+    console.log(createdCohort)
 
     return sendDataResponse(res, 201, createdCohort)
   } catch (e) {
-    return sendMessageResponse(res, 500, 'Unable to create cohort')
+    return sendMessageResponse(res, 500, e.message)
   }
 }
 

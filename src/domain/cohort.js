@@ -15,11 +15,11 @@ export async function createCohort() {
 export class Cohort {
   constructor(
     id = null,
-    deliveryLogs = null,
-    users = null,
+    deliveryLogs = undefined,
+    users = undefined,
     startDate,
     endDate,
-    specialism = null,
+    specialismId = null,
     jobTitle
   ) {
     this.id = id
@@ -27,7 +27,7 @@ export class Cohort {
     this.users = users
     this.startDate = startDate
     this.endDate = endDate
-    this.specialism = specialism
+    this.specialismId = specialismId
     this.jobTitle = jobTitle
   }
 
@@ -39,10 +39,25 @@ export class Cohort {
         users: this.users,
         startDate: this.startDate,
         endDate: this.endDate,
-        specialism: this.specialism,
+        specialismId: this.specialismId,
         jobTitle: this.jobTitle
       }
     }
+  }
+
+  static async fromJson(json) {
+    // eslint-disable-next-line camelcase
+    const { deliveryLogs, users, startDate, endDate, specialismId, jobTitle } = json
+
+    return new Cohort(
+      null,
+      deliveryLogs || undefined,
+      users || undefined,
+      startDate,
+      endDate,
+      specialismId,
+      jobTitle || null
+    )
   }
 
   static fromDb(cohort) {
@@ -52,9 +67,26 @@ export class Cohort {
       cohort.users,
       cohort.startDate,
       cohort.endDate,
-      cohort.specialism,
+      cohort.specialismId,
       cohort.jobTitle
     )
+  }
+
+  async save() {
+    const data = {
+      deliveryLogs: this.deliveryLogs,
+      users: this.user,
+      startDate: this.startDate,
+      endDate: this.endDate,
+      jobTitle: this.jobTitle,
+      specialismId: this.specialismId
+    }
+
+    const createdCohort = await dbClient.cohort.create({
+      data
+    })
+
+    return Cohort.fromDb(createdCohort)
   }
 
   static async findAll() {
