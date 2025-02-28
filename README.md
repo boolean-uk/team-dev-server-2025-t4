@@ -20,7 +20,7 @@ Once you have complete the above guide, continue to the steps below.
 
 [todo]: <Deploy and update the link below>
 
-[Deployed API Spec](https://UPDATEME)
+[Deployed API Spec](https://team-dev-api.nymo.xyz/api-docs)
 
 The API Spec is hosted by the server itself (i.e. this project), and the view/page is generated automatically by the SwaggerUI libraryi.
 
