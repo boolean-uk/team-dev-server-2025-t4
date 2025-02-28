@@ -19,7 +19,7 @@ export class Cohort {
     users = null,
     startDate,
     endDate,
-    specialism = null,
+    specialismId = null,
     jobTitle
   ) {
     this.id = id
@@ -27,7 +27,7 @@ export class Cohort {
     this.users = users
     this.startDate = startDate
     this.endDate = endDate
-    this.specialism = specialism
+    this.specialismId = specialismId
     this.jobTitle = jobTitle
   }
 
@@ -39,7 +39,7 @@ export class Cohort {
         users: this.users,
         startDate: this.startDate,
         endDate: this.endDate,
-        specialism: this.specialism,
+        specialismId: this.specialismId,
         jobTitle: this.jobTitle
       }
     }
@@ -52,7 +52,7 @@ export class Cohort {
       cohort.users,
       cohort.startDate,
       cohort.endDate,
-      cohort.specialism,
+      cohort.specialismId,
       cohort.jobTitle
     )
   }

@@ -10,10 +10,9 @@ export async function validateTeacherRole(req, res, next) {
 
   if (req.user.role !== 'TEACHER') {
     return sendDataResponse(res, 403, {
-      authorization: 'You are not authorized to perform this action'
+      authorization: 'Must be a teacher to perform this action.'
     })
   }
-
   next()
 }
 
