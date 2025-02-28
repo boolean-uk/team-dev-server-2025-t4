@@ -9,37 +9,11 @@ export async function validateTeacherRole(req, res, next) {
   }
 
   if (req.user.role !== 'TEACHER') {
-    throw new Error('This action requires TEACHER privileges.')
+    return sendDataResponse(res, 403, {
+      authorization: 'Must be a teacher to perform this action.'
+    })
   }
-
   next()
-}
-
-export async function validateStudentPermission(req, res, next) {
-  const id = parseInt(req.params.id)
-  if (!req.user) {
-    return sendMessageResponse(res, 500, 'Unable to verify user')
-  }
-
-  if (req.user.id !== id) {
-    throw new Error('User is not authorized to modify this profile')
-  }
-
-  next()
-}
-
-export async function validatePatchPermissionsForProfiles(req, res, next) {
-  try {
-    await validateTeacherRole(req, res, next)
-  } catch (error) {
-    try {
-      await validateStudentPermission(req, res, next)
-    } catch (error) {
-      return sendDataResponse(res, 403, {
-        authorization: 'You are not authorized to perform this action'
-      })
-    }
-  }
 }
 
 export async function validateAuthentication(req, res, next) {

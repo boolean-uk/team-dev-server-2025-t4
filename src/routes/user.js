@@ -4,8 +4,7 @@ import {
   getById,
   getAll,
   updateById,
-  getByName,
-  createProfile
+  getByName
 } from '../controllers/user.js'
 import {
   validateAuthentication,
