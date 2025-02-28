@@ -12,9 +12,12 @@ export const createProfile = async (req, res) => {
   }
 
   const profile = await Profile.fromJson(req.body)
-  const createdProfile = await profile.save(paramId)
-
-  return sendDataResponse(res, 201, createdProfile)
+  try {
+    const createdProfile = await profile.save(paramId)
+    return sendDataResponse(res, 201, createdProfile)
+  } catch (e) {
+    return sendDataResponse(res, 400, e.message)
+  }
 }
 
 export const updateProfile = async (req, res) => {
@@ -26,8 +29,6 @@ export const updateProfile = async (req, res) => {
     if (!user) {
       return sendDataResponse(res, 404, { error: 'User not found' })
     }
-
-    console.log(user)
 
     if (!user.profile) {
       return sendDataResponse(res, 404, {

@@ -1,4 +1,5 @@
 import dbClient from '../utils/dbClient.js'
+import { Prisma } from '@prisma/client'
 
 export default class Profile {
   /**
@@ -99,12 +100,17 @@ export default class Profile {
         }
       }
     }
-
-    const createdProfile = await dbClient.profile.create({
-      data
-    })
-
-    return Profile.fromDb(createdProfile)
+    try {
+      const createdProfile = await dbClient.profile.create({
+        data
+      })
+      return Profile.fromDb(createdProfile)
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        throw new Error('Profile already exists. Try using PATCH to update it')
+      }
+      throw new Error('Something went wrong')
+    }
   }
 
   static async findById(id) {
