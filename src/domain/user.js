@@ -179,6 +179,15 @@ export default class User {
     return User._findManyContains('lastName', lastName)
   }
 
+  static async findManyThatContainsBothNames(firstName, lastName) {
+    return User._findManyContainsTwoKeys(
+      'firstName',
+      firstName,
+      'lastName',
+      lastName
+    )
+  }
+
   static async findAll() {
     return User._findMany()
   }
@@ -230,6 +239,35 @@ export default class User {
           }
         }
       },
+      include: {
+        profile: true
+      }
+    })
+
+    return foundUsers.map((user) => User.fromDb(user))
+  }
+
+  static async _findManyContainsTwoKeys(key1, value1, key2, value2) {
+    const whereConditions = {
+      profile: {}
+    }
+
+    if (value1) {
+      whereConditions.profile[key1] = {
+        contains: value1,
+        mode: 'insensitive'
+      }
+    }
+
+    if (value2) {
+      whereConditions.profile[key2] = {
+        contains: value2,
+        mode: 'insensitive'
+      }
+    }
+
+    const foundUsers = await dbClient.user.findMany({
+      where: whereConditions,
       include: {
         profile: true
       }
