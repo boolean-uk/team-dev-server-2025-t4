@@ -1,6 +1,7 @@
 import { sendDataResponse, sendMessageResponse } from '../utils/responses.js'
 import User from '../domain/user.js'
 import dbClient from '../utils/dbClient.js'
+import Profile from '../domain/profile.js'
 
 export const createProfile = async (req, res) => {
   const paramId = parseInt(req.params.id)
@@ -10,8 +11,8 @@ export const createProfile = async (req, res) => {
     return sendDataResponse(res, 404, 'user not found!')
   }
 
-  const profile = await User.fromJson(req.body)
-  const createdProfile = await profile.createProfile(paramId)
+  const profile = await Profile.fromJson(req.body)
+  const createdProfile = await profile.save(paramId)
 
   return sendDataResponse(res, 201, createdProfile)
 }

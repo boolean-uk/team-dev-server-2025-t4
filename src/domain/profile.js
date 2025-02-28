@@ -6,19 +6,19 @@ export default class Profile {
    * take as inputs, what types they return, and other useful information that JS doesn't have built in
    * @tutorial https://www.valentinog.com/blog/jsdoc
    *
-   * @param { { id: int, profile: { firstName: string, lastName: string, bio: string, githubUrl: string, username: string, mobile: string } } } profile
+   * @param { { id: int, firstName: string, lastName: string, bio: string, githubUrl: string, username: string, mobile: string } } profile
    * @returns {Profile}
    */
   static fromDb(profile) {
     return new Profile(
       profile.id,
       profile.userId,
-      profile.profile.firstName,
-      profile.profile.lastName,
-      profile.profile?.bio,
-      profile.profile?.githubUrl,
-      profile.profile?.username,
-      profile.profile?.mobile
+      profile.firstName,
+      profile.lastName,
+      profile?.bio,
+      profile?.githubUrl,
+      profile?.username,
+      profile?.mobile
     )
   }
 
@@ -73,7 +73,7 @@ export default class Profile {
         userId: this.userId,
         firstName: this.firstName,
         lastName: this.lastName,
-        biography: this.bio,
+        bio: this.bio,
         githubUrl: this.githubUrl,
         username: this.username,
         mobile: this.mobile
@@ -85,15 +85,23 @@ export default class Profile {
    * @returns {Profile}
    *  A profile instance containing an ID, representing the profile data created in the database
    */
-  async save() {
-    const createdProfile = await dbClient.profile.create({
-      userId: this.userId,
+  async save(id) {
+    const data = {
       firstName: this.firstName,
       lastName: this.lastName,
-      biography: this.bio,
+      bio: this.bio,
       githubUrl: this.githubUrl,
       username: this.username,
-      mobile: this.mobile
+      mobile: this.mobile,
+      user: {
+        connect: {
+          id: id
+        }
+      }
+    }
+
+    const createdProfile = await dbClient.profile.create({
+      data
     })
 
     return Profile.fromDb(createdProfile)
