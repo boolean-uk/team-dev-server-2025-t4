@@ -62,24 +62,17 @@ export const getByName = async (req, res) => {
       return sendMessageResponse(res, 400, 'Search query is required')
     }
 
-    let usersByFirstName = []
-    let usersByLastName = []
+    let usersList = []
 
-    if (firstName) {
-      usersByFirstName = await User.findManyThatContainsFirstName(firstName)
+    if (firstName && lastName) {
+      usersList = await User.findManyThatContainsBothNames(firstName, lastName)
+    } else if (firstName) {
+      usersList = await User.findManyThatContainsFirstName(firstName)
+    } else if (lastName) {
+      usersList = await User.findManyThatContainsLastName(lastName)
     }
-    if (lastName) {
-      usersByLastName = await User.findManyThatContainsLastName(lastName)
-    }
 
-    const uniqueUsers = [...usersByFirstName, ...usersByLastName]
-      .reduce((acc, user) => {
-        acc.set(user.id, user) // Using a Map to remove duplicates
-        return acc
-      }, new Map())
-      .values()
-
-    return sendDataResponse(res, 200, [...uniqueUsers]) // Convert back to array
+    return sendDataResponse(res, 200, usersList)
   } catch (error) {
     console.error('Error fetching users:', error)
     return sendMessageResponse(res, 500, 'Unable to get users')
