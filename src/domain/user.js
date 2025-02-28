@@ -94,6 +94,9 @@ export default class User {
     const foundUser = await dbClient.user.findUnique({
       where: {
         [key]: value
+      },
+      include: {
+        profile: true
       }
     })
 
