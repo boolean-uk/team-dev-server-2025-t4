@@ -15,8 +15,8 @@ export async function createCohort() {
 export class Cohort {
   constructor(
     id = null,
-    deliveryLogs = null,
-    users = null,
+    deliveryLogs = undefined,
+    users = undefined,
     startDate,
     endDate,
     specialismId = null,
@@ -45,6 +45,21 @@ export class Cohort {
     }
   }
 
+  static async fromJson(json) {
+    // eslint-disable-next-line camelcase
+    const { deliveryLogs, users, startDate, endDate, specialismId, jobTitle } = json
+
+    return new Cohort(
+      null,
+      deliveryLogs || undefined,
+      users || undefined,
+      startDate,
+      endDate,
+      specialismId,
+      jobTitle || null
+    )
+  }
+
   static fromDb(cohort) {
     return new Cohort(
       cohort.id,
@@ -55,6 +70,23 @@ export class Cohort {
       cohort.specialismId,
       cohort.jobTitle
     )
+  }
+
+  async save() {
+    const data = {
+      deliveryLogs: this.deliveryLogs,
+      users: this.user,
+      startDate: this.startDate,
+      endDate: this.endDate,
+      jobTitle: this.jobTitle,
+      specialismId: this.specialismId
+    }
+
+    const createdCohort = await dbClient.cohort.create({
+      data
+    })
+
+    return Cohort.fromDb(createdCohort)
   }
 
   static async findAll() {
